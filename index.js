@@ -6,6 +6,9 @@ const nodemailer = require('nodemailer');
 const dotenv = require('dotenv');
 dotenv.config();
 
+const cors = require('cors');
+app.use(cors());
+
 const PORT = 8080;
 
 // Middleware
@@ -123,6 +126,16 @@ app.post('/api/emails/send-email', (req, res) => {
         subject: subject,
         text: message
     };
+
+    // update emailData array
+    const newEmail = {
+        id: emailData.length + 1,
+        to: to,
+        subject: subject,
+        message: message
+    };
+
+    emailData.push(newEmail);
 
     try {
         transporter.sendMail(mailOptions, (err, data) => {
